@@ -35,11 +35,12 @@ class SignupViewController: UIViewController {
     
     
     @IBAction func didHitSignUpButton(_ sender: Any) {
-        if emailLabel.text == nil {
+        
+        if (emailLabel.text?.isEmpty)!  {
             self.present(emailAlertController, animated: true)
-        } else if usernameLabel.text == nil {
+        } else if (usernameLabel.text?.isEmpty)! {
             self.present(usernameAlertController, animated: true)
-        } else if passwordLabel.text == nil {
+        } else if (passwordLabel.text?.isEmpty)! {
             self.present(passwordAlertController, animated: true)
         } else {
             // initialize a user object
@@ -57,6 +58,7 @@ class SignupViewController: UIViewController {
                     print(error.localizedDescription)
                 } else {
                     print("User Registered successfully")
+                    self.dismiss(animated: true, completion: nil)
                     // manually segue to logged in view
                 }
             }
@@ -75,12 +77,12 @@ class SignupViewController: UIViewController {
         })
         
         emailAlertController.addAction(UIAlertAction(title: "OK", style: .default) { (action) in
-            self.usernameLabel.text = nil
             self.passwordLabel.text = nil
             
         })
         
         signupErrorAlertController.addAction(UIAlertAction(title: "OK", style: .default) { (action) in
+            self.emailLabel.text = nil
             self.usernameLabel.text = nil
             self.passwordLabel.text = nil
             
