@@ -54,6 +54,8 @@ class SignupViewController: UIViewController {
             // call sign up function on the object
             newUser.signUpInBackground { (success: Bool, error: Error?) in
                 if let error = error {
+                    self.signupErrorAlertController.message = error.localizedDescription
+                    self.signupErrorAlertController.title = "Error"
                     self.present(self.signupErrorAlertController, animated: true)
                     print(error.localizedDescription)
                 } else {
@@ -63,6 +65,11 @@ class SignupViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    
+    @IBAction func didHitDismissButton(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     

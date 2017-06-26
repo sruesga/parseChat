@@ -9,15 +9,25 @@
 import UIKit
 import Parse
 
-class ChatViewController: UIViewController {
+class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var chatMessageField: UITextField!
     
+    @IBOutlet weak var tableView: UITableView!
+    
+    var messages: [PFObject]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.onTimer), userInfo: nil, repeats: true)
+        tableView.reloadData()
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -26,18 +36,49 @@ class ChatViewController: UIViewController {
     
     @IBAction func didHitSendButton(_ sender: Any) {
         let chatMessage = PFObject(className: "Message_fbu2017")
-        
         chatMessage["text"] = chatMessageField.text ?? ""
-        
+        chatMessage["user"] = PFUser.current()
         chatMessage.saveInBackground { (success, error) in
             if success {
                 print("The message was saved!")
-                chatMessageField.text = nil
+                self.chatMessageField.text = nil
             } else if let error = error {
                 print("Problem saving message: \(error.localizedDescription)")
             }
         }
     }
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // construct PFQuery
+        let query = PFQuery(className: "Message_fbu2017")
+        query.order(byDescending: "createdAt")
+        query.includeKey("user")
+        
+        // fetch data asynchronously
+        
+        query.findObjectsInBackground{ (messages: [PFObject]?, error: Error?) -> Void in
+            if let messages = messages {
+                self.messages = messages
+            } else {
+                print(error?.localizedDescription)
+            }
+        }
+        return messages?.count ?? 0
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
+        if let messages = messages {
+            cell.chatText.text = messages[indexPath.row] as! String
+        }
+        return cell
+    }
+    
+    func onTimer() {
+    
+        }
+    
+
     
 
     /*
