@@ -56,14 +56,16 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="Login"/>
+                                <connections>
+                                    <action selector="didHitLoginButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6U0-lU-bjv"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <connections>
-                        <outlet property="didHitLoginButton" destination="kgz-1x-B02" id="3dq-P1-GnJ"/>
-                        <outlet property="password" destination="OIj-Qk-oJp" id="hT1-JR-bKj"/>
-                        <outlet property="username" destination="KPJ-za-XL6" id="smb-LD-UfW"/>
+                        <outlet property="passwordLabel" destination="OIj-Qk-oJp" id="2aP-qq-KLl"/>
+                        <outlet property="usernameLabel" destination="KPJ-za-XL6" id="D0e-M7-vdO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
