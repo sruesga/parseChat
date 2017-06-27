@@ -21,8 +21,16 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        
+        
         tableView.delegate = self
         tableView.dataSource = self
+        
+        
+        // Auto size row height based on cell autolayout constraints
+        tableView.rowHeight = UITableViewAutomaticDimension
+        // Provide an estimated row height. Used for calculating scroll indicator
+        tableView.estimatedRowHeight = 50
         
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.onTimer), userInfo: nil, repeats: true)
     }
@@ -69,7 +77,16 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
         if let messages = messages {
-            cell.chatText.text = messages[indexPath.row]["text"] as! String
+            let message = messages[indexPath.row]
+            cell.chatText.text = message["text"] as! String
+            if let user = message["user"] as? PFUser {
+                // User found! update username label with username
+                cell.usernameLabel.text = user.username
+            } else {
+                // No user found, set default username
+                cell.usernameLabel.text = "🤖"
+            }
+
         }
         return cell
     }
