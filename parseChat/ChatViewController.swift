@@ -25,7 +25,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.dataSource = self
         
         Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.onTimer), userInfo: nil, repeats: true)
-        tableView.reloadData()
     }
     
 
@@ -59,6 +58,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         query.findObjectsInBackground{ (messages: [PFObject]?, error: Error?) -> Void in
             if let messages = messages {
                 self.messages = messages
+                tableView.reloadData()
             } else {
                 print(error?.localizedDescription)
             }
@@ -69,7 +69,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath) as! ChatCell
         if let messages = messages {
-            cell.chatText.text = messages[indexPath.row] as! String
+            cell.chatText.text = messages[indexPath.row]["text"] as! String
         }
         return cell
     }
